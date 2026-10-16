@@ -1,10 +1,4 @@
 import { useNavigate } from 'react-router-dom'
-import { Card, CardContent } from '../../../components/ui/card'
-import { Badge } from '../../../components/ui/badge'
-import { Button } from '../../../components/ui/button'
-// import { LogOut, BookOpen } from 'lucide-react'
-import logoImg from '../../../assets/public/AuthLogo.png'
-import { LogOut } from 'lucide-react'
 import { ERP_MODULES, type ErpModule } from '../../../config/modules.config'
 import { Navbar } from '../../../components/common/Navbar'
 
@@ -12,13 +6,13 @@ export function DashboardPage() {
     const navigate = useNavigate()
 
     // Recuperamos datos del usuario del localStorage
-    const user = JSON.parse(localStorage.getItem('user') || '{"name": "Usuario"}')
+    // const user = JSON.parse(localStorage.getItem('user') || '{"name": "Usuario"}')
 
-    const handleLogout = () => {
-        localStorage.removeItem('token')
-        localStorage.removeItem('user')
-        navigate('/login')
-    }
+    // const handleLogout = () => {
+    //     localStorage.removeItem('token')
+    //     localStorage.removeItem('user')
+    //     navigate('/login')
+    // }
 
     const handleModuleClick = (module: ErpModule) => {
         if (module.enabled) {
@@ -28,30 +22,7 @@ export function DashboardPage() {
 
     return (
         <div className="min-h-screen bg-slate-100 dark:bg-slate-950 flex flex-col relative bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px]">
-            {/* Header Superior */}
-            {/* <header className="border-b bg-background/95 backdrop-blur sticky top-0 z-10 px-6 py-4 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                    <div className="flex justify-center items-center">
-                        <img
-                            src={logoImg}
-                            alt="Génesis ERP Logo"
-                            className="h-14 w-auto object-contain"
-                        />
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-4">
-                    <span className="text-sm font-medium hidden sm:inline-block">
-                        Hola, <span className="text-primary">{user.name}</span>
-                    </span>
-                    <Button variant="ghost" size="sm" onClick={handleLogout} className="text-destructive hover:bg-destructive/10">
-                        <LogOut className="w-4 h-4 mr-2" />
-                        <span className="hidden sm:inline">Salir</span>
-                    </Button>
-                </div>
-            </header> */}
             <Navbar showBackButton />
-
             {/* Contenido Principal: Grid Estilo Odoo */}
             <main className="flex-1 max-w-5xl w-full mx-auto p-4 md:p-10 flex items-start justify-center">
 

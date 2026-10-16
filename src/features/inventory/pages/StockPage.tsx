@@ -167,7 +167,7 @@ export function StockPage() {
     const totalPages = Math.ceil(totalRecords / ITEMS_PER_PAGE) || 1
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col">
+        <div className="min-h-screen bg-slate-100 dark:bg-slate-950 flex flex-col relative bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px]">
             {/* Navbar reutilizable con botón de retorno */}
             <Navbar showBackButton />
 
@@ -413,8 +413,8 @@ export function StockPage() {
 
                             {/* VISTA DE PRECIOS */}
                             {selectedProduct && modalType === 'price' && (
-                                Object.keys(selectedProduct.warehousesPvp).length > 0 ? (
-                                    Object.entries(selectedProduct.warehousesPvp).map(([wareCode, pvpPrice]) => {
+                                Object.keys(selectedProduct.warehousesPvp ?? {}).length > 0 ? (
+                                    Object.entries(selectedProduct.warehousesPvp ?? {}).map(([wareCode, pvpPrice]) => {
                                         const isEnabled = selectedProduct.warehousesEnabled[wareCode] ?? true
 
                                         return (
