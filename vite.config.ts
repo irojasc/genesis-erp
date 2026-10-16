@@ -9,7 +9,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
-  base: '/genesis-erp/',
+  base: process.env.NODE_ENV === 'production' ? '/genesis-erp/' : '/',
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

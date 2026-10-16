@@ -1,15 +1,15 @@
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
+import { useState, useRef, useEffect } from 'react'
+import { Button } from '../../../components/ui/button'
 import {
     Card,
     CardContent,
     CardDescription,
     CardFooter,
     CardHeader,
-    CardTitle,
-} from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+    // CardTitle,
+} from '../../../components/ui/card'
+import { Input } from '../../../components/ui/input'
+import { Label } from '../../../components/ui/label'
 import { Eye, EyeOff } from "lucide-react";
 import type { LoginCredentials } from '../types/auth.types'
 import logoImg from '../../../assets/public/AuthLogo.png'
@@ -17,36 +17,55 @@ import logoImg from '../../../assets/public/AuthLogo.png'
 interface LoginFormProps {
     onLoginSubmit?: (credentials: LoginCredentials) => void;
     onForgotPasswordClick?: () => void;
+    errorMessage?: string | null;
+    isLoading?: boolean;
 }
 
-export function LoginForm({ onLoginSubmit, onForgotPasswordClick }: LoginFormProps) {
+export function LoginForm({ onLoginSubmit,
+    onForgotPasswordClick,
+    errorMessage,
+    isLoading = false,
+}: LoginFormProps) {
+
     const [credentials, setCredentials] = useState<LoginCredentials>({
         usernameOrEmail: '',
         password: '',
     })
-    const [isLoading, setIsLoading] = useState(false)
+
+    // Referencia para hacer foco automático en la contraseña tras un error
+    const passwordInputRef = useRef<HTMLInputElement>(null)
     const [showPassword, setShowPassword] = useState(false);
+
+    // Si hay un mensaje de error (credenciales incorrectas), limpiamos solo la contraseña
+    useEffect(() => {
+        if (errorMessage) {
+            setCredentials((prev) => ({ ...prev, password: '' }))
+            passwordInputRef.current?.focus()
+        }
+    }, [errorMessage])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         setCredentials((prev) => ({ ...prev, [name]: value }))
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
-        setIsLoading(true)
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
 
-        // Simulación de envío / integración futura con API
         if (onLoginSubmit) {
-            onLoginSubmit(credentials)
+            try {
+                await onLoginSubmit(credentials)
+            }
+            catch (error) {
+                console.error("Error", error);
+            }
         }
-
-        setTimeout(() => {
-            setIsLoading(false)
-        }, 1000)
     }
 
-    const togglePasswordVisibility = () => {
+    const togglePasswordVisibility = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
         setShowPassword((prev) => !prev);
     };
 
@@ -63,10 +82,6 @@ export function LoginForm({ onLoginSubmit, onForgotPasswordClick }: LoginFormPro
                 </div>
 
                 <div>
-                    {/* <CardTitle className="text-2xl font-bold tracking-tight">
-                        Génesis ERP
-                    </CardTitle> */}
-
                     <CardDescription className="text-muted-foreground text-sm mt-1">
                         Ingresa tus credenciales para acceder al sistema
                     </CardDescription>
@@ -76,6 +91,11 @@ export function LoginForm({ onLoginSubmit, onForgotPasswordClick }: LoginFormPro
             <form onSubmit={handleSubmit}>
                 <CardContent className="space-y-4! pb-4!">
                     {/* Campo Usuario / Correo */}
+                    {errorMessage && (
+                        <div className="p-3 text-xs font-medium text-destructive bg-destructive/10 border border-destructive/20 rounded-md text-center transition-all animate-in fade-in">
+                            {errorMessage}
+                        </div>
+                    )}
                     <div className="space-y-2! text-left!">
                         <Label htmlFor="usernameOrEmail">Usuario</Label>
                         <Input
@@ -87,6 +107,7 @@ export function LoginForm({ onLoginSubmit, onForgotPasswordClick }: LoginFormPro
                             onChange={handleChange}
                             required
                             autoComplete="username"
+                            disabled={isLoading}
                         />
                     </div>
 
@@ -95,13 +116,15 @@ export function LoginForm({ onLoginSubmit, onForgotPasswordClick }: LoginFormPro
                         <Label htmlFor="password">Contraseña</Label>
                         <div className="relative">
                             <Input
+                                ref={passwordInputRef}
                                 id="password"
                                 name="password"
                                 type={showPassword ? "text" : "password"}
-                                placeholder="••••••••"
+                                // placeholder="••••••••"
                                 value={credentials.password}
                                 onChange={handleChange}
                                 required
+                                disabled={isLoading}
                                 autoComplete="current-password"
                                 className="pr-10"
                             />
@@ -112,6 +135,7 @@ export function LoginForm({ onLoginSubmit, onForgotPasswordClick }: LoginFormPro
                                 className="absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:bg-transparent"
                                 onClick={togglePasswordVisibility}
                                 aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                                tabIndex={-1}
                             >
                                 {showPassword ? (
                                     <EyeOff className="h-4 w-4" />
