@@ -39,7 +39,7 @@ export const ERP_MODULES: ErpModule[] = [
         icon: ShoppingCart,
         path: '/sales',
         color: 'bg-amber-500 text-white shadow-amber-500/20',
-        enabled: false,
+        enabled: true,
     },
     {
         id: 'reports',

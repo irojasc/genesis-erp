@@ -3,6 +3,7 @@ import { LoginPage } from '../features/auth/pages/LoginPage'
 import { DashboardPage } from '../features/dashboard/pages/DashboardPage'
 import { ProtectedRoute } from './ProtectedRoute'
 import { StockPage } from '../features/inventory/pages/StockPage'
+import { QuickSalePage } from '../features/sales/pages/QuickSalePage'
 
 export function AppRoutes() {
     return (
@@ -16,6 +17,10 @@ export function AppRoutes() {
                 {/* Aquí agregaremos más rutas del ERP en el futuro (ej. /inventario, /ventas) */}
                 <Route path="/inventory" element={<Navigate to="/inventory/stock" replace />} />
                 <Route path="/inventory/stock" element={<StockPage />} />
+
+                {/* 2. Ventas (NUEVAS LÍNEAS) */}
+                <Route path="/sales" element={<Navigate to="/sales/quick-sale" replace />} />
+                <Route path="/sales/quick-sale" element={<QuickSalePage />} />
 
                 <Route
                     path="/contacts"
