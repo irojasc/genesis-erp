@@ -24,6 +24,8 @@ export interface SaleItem {
     cod: string;        // 👈 Prefijo del producto (ej: "GN")
     isbn: string;
     title: string;
+    author?: string;    // 👈 Reincorporado como opcional
+    publisher?: string; // 👈 Reincorporado como opcional
     unitPrice: number;  // Precio unitario
     quantity: number;   // Cantidad
     subtotal: number;   // unitPrice * quantity

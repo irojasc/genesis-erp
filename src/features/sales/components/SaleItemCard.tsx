@@ -39,7 +39,7 @@ export function SaleItemCard({
                         {item.title}
                     </h4>
                     <p className="text-[11px]! text-muted-foreground! truncate!">
-                        {item.author} • <span className="italic">{item.publisher}</span>
+                        {item.author ?? 'xxx'} • <span className="italic">{item.publisher ?? 'xxx'}</span>
                     </p>
                 </div>
                 <Button
